@@ -30,7 +30,8 @@ def make_shell_context():
 @app.cli.command()
 @click.option('--coverage/--no-coverage', default=False,
               help='Run tests under code coverage.')
-def test(coverage):
+@click.argument('test_names', nargs=-1)
+def test(coverage, test_names):
     """Run the unit tests."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):
         import subprocess
@@ -38,7 +39,11 @@ def test(coverage):
         sys.exit(subprocess.call(sys.argv))
 
     import unittest
-    tests = unittest.TestLoader().discover('tests')
+
+    if test_names:
+        tests = unittest.TestLoader().loadTestsFromNames(test_names)
+    else:
+        tests = unittest.TestLoader().discover('tests')
     unittest.TextTestRunner(verbosity=2).run(tests)
     if COV:
         COV.stop()
