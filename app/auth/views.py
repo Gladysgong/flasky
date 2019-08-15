@@ -54,13 +54,7 @@ def logout():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-<<<<<<< HEAD
-        user = User(email=form.email.data,
-=======
-        user = User(email=form.email.data.lower(),
->>>>>>> upstream/master
-                    username=form.username.data,
-                    password=form.password.data)
+        user = User(email=form.email.data.lower(),username=form.username.data,password=form.password.data)
         db.session.add(user)
         db.session.commit()
         token = user.generate_confirmation_token()
@@ -116,21 +110,12 @@ def password_reset_request():
         return redirect(url_for('main.index'))
     form = PasswordResetRequestForm()
     if form.validate_on_submit():
-<<<<<<< HEAD
-        user = User.query.filter_by(email=form.email.data).first()
-=======
         user = User.query.filter_by(email=form.email.data.lower()).first()
->>>>>>> upstream/master
         if user:
             token = user.generate_reset_token()
             send_email(user.email, 'Reset Your Password',
                        'auth/email/reset_password',
-<<<<<<< HEAD
-                       user=user, token=token,
-                       next=request.args.get('next'))
-=======
                        user=user, token=token)
->>>>>>> upstream/master
         flash('An email with instructions to reset your password has been '
               'sent to you.')
         return redirect(url_for('auth.login'))
@@ -158,11 +143,7 @@ def change_email_request():
     form = ChangeEmailForm()
     if form.validate_on_submit():
         if current_user.verify_password(form.password.data):
-<<<<<<< HEAD
-            new_email = form.email.data
-=======
             new_email = form.email.data.lower()
->>>>>>> upstream/master
             token = current_user.generate_email_change_token(new_email)
             send_email(new_email, 'Confirm your email address',
                        'auth/email/change_email',
