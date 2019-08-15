@@ -64,9 +64,5 @@ class ChangeEmailForm(FlaskForm):
     submit = SubmitField('Update Email Address')
 
     def validate_email(self, field):
-<<<<<<< HEAD
-        if User.query.filter_by(email=field.data).first():
-=======
         if User.query.filter_by(email=field.data.lower()).first():
->>>>>>> upstream/master
             raise ValidationError('Email already registered.')
